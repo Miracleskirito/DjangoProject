@@ -3,6 +3,8 @@ from django.urls import path
 from shop import views
 
 urlpatterns = [
-    path("products/", views.bulk_order, name="bulk_order"),
-    path("products/<int:product_id>", views.product_search, name="product"),
+    # 批量订单路径
+    path("products/bulk_order/", views.bulk_order, name="bulk_order"),
+    # 单个商品详情路径（如果需要）
+    path('products/search/', views.product_search, name='product_search'),
 ]
