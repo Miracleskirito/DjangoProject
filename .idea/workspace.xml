@@ -1,11 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="c97eac06-2f3c-4b48-ab6d-0aae62d0a4e2" name="更改" comment="" />
+    <list default="true" id="c97eac06-2f3c-4b48-ab6d-0aae62d0a4e2" name="更改" comment="初始模版">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/9fbfbd8a-5ccc-4cda-ab14-5dba5c193cf4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/9fbfbd8a-5ccc-4cda-ab14-5dba5c193cf4/storage_v2/_src_/schema/PyBS.OiwmAA.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/9fbfbd8a-5ccc-4cda-ab14-5dba5c193cf4/storage_v2/_src_/schema/PyBS.OiwmAA.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/9fbfbd8a-5ccc-4cda-ab14-5dba5c193cf4/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/9fbfbd8a-5ccc-4cda-ab14-5dba5c193cf4/storage_v2/_src_/schema/mysql.osA4Bg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/9fbfbd8a-5ccc-4cda-ab14-5dba5c193cf4/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/9fbfbd8a-5ccc-4cda-ab14-5dba5c193cf4/storage_v2/_src_/schema/sys.zb4BAA.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/manage.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shop/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shop/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shop/apps.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shop/migrations/0001_initial.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shop/migrations/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shop/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shop/services.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shop/tests.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shop/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/shop/views.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/终版/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/终版/asgi.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/终版/settings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/终版/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/终版/wsgi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseLocalColorSettings">
+    <colors>
+      <entry key="9fbfbd8a-5ccc-4cda-ab14-5dba5c193cf4" value="Blue" />
+    </colors>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -20,11 +63,24 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Django 服务器.DjangoProject2.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
   }
 }]]></component>
   <component name="RunManager">
@@ -69,8 +125,47 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1751018316697</updated>
-      <workItem from="1751018317690" duration="1000" />
+      <workItem from="1751018317690" duration="8719000" />
     </task>
+    <task id="LOCAL-00001" summary="初始模版">
+      <option name="closed" value="true" />
+      <created>1751018549286</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1751018549286</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="初始模版" />
+    <option name="LAST_COMMIT_MESSAGE" value="初始模版" />
   </component>
 </project>
