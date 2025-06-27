@@ -31,6 +31,17 @@ ALLOWED_HOSTS = [
 ]
 
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/0',  # 本地 Redis 地址
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            # 'PASSWORD': 'your_redis_password',
+        }
+    }
+}
+
 # Application definition
 
 INSTALLED_APPS = [
