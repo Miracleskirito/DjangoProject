@@ -12,8 +12,6 @@ class OrderService:
     def create_bulk_order(order_items_data):
         """
         批量创建订单
-        :param order_items_data: [{"product_id": 1, "quantity": 2}, ...]
-        :return: (order_object, errors)
         """
         order = Order.objects.create()
         errors = []
@@ -22,6 +20,7 @@ class OrderService:
         for item_data in order_items_data:
             product_id = item_data['product_id']
             quantity = item_data['quantity']
+            print(product_id, quantity)
 
             try:
                 # 获取商品并加锁
