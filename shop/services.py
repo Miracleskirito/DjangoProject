@@ -90,45 +90,28 @@ class SearchService:
         """商品搜索（带缓存）"""
         cache_key = f"search_{query}"
         conn = get_redis_connection("default")
-        #print(f"[DEBUG] 搜索关键词: {query}")
-        #print(f"[DEBUG] 缓存键: {cache_key}")
 
         # 尝试从缓存获取
         try:
-            #print("[DEBUG] 尝试从缓存获取结果...")
             if conn.exists(cache_key):
-                #print("[DEBUG] 缓存命中")
+                # 从缓存获取的是商品名称列表（转为字符串）
                 cache_result = conn.smembers(cache_key)
-                #print(f"[DEBUG] 缓存结果: {cache_result}")
-                return cache_result
-            else:
-                print("[DEBUG] 缓存未命中")
+                return [name.decode('utf-8') for name in cache_result]
         except Exception as e:
-            #print(f"[ERROR] 缓存查询失败: {e}")
-            import traceback
-            #print(f"[ERROR] 堆栈信息: {traceback.format_exc()}")
+            pass
 
-        # 缓存失效时查询数据库
-        #print("[DEBUG] 开始查询数据库...")
+        # 缓存失效时查询数据库，获取 name 字段
         results = Product.objects.filter(
             models.Q(name__icontains=query) |
             models.Q(description__icontains=query)
-        ).values_list('id', flat=True)
-        #print(f"[DEBUG] 数据库查询结果: {list(results)}")
+        ).values_list('name', flat=True)  # 修改为获取 name 字段
 
-        # 回填缓存（异步执行）
+        # 回填缓存（存储商品名称）
         try:
             if results:
-                #print(f"[DEBUG] 开始回填缓存，结果数量: {len(results)}")
-                conn.sadd(cache_key, *results)
+                conn.sadd(cache_key, *results)  # 直接存储商品名称列表
                 conn.expire(cache_key, 60 * 5)  # 缓存5分钟
-                #print("[DEBUG] 缓存回填成功")
-            else:
-                #print("[DEBUG] 结果为空，不进行缓存")
         except Exception as e:
-            #print(f"[ERROR] 缓存回填失败: {e}")
-            import traceback
-            #print(f"[ERROR] 堆栈信息: {traceback.format_exc()}")
+            pass
 
-        #print(f"[DEBUG] 返回结果: {list(results)}")
-        return results
+        return list(results)  # 返回商品名称列表

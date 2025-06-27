@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c97eac06-2f3c-4b48-ab6d-0aae62d0a4e2" name="更改" comment="购买接口成功运行，保存&#10;调试搜寻接口">
+    <list default="true" id="c97eac06-2f3c-4b48-ab6d-0aae62d0a4e2" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/c038e118-77ee-4011-85eb-88b2eefdb241.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/c038e118-77ee-4011-85eb-88b2eefdb241/storage_v2/_src_/schema/information_schema.FNRwLQ.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/c038e118-77ee-4011-85eb-88b2eefdb241/storage_v2/_src_/schema/mysql.osA4Bg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/c038e118-77ee-4011-85eb-88b2eefdb241/storage_v2/_src_/schema/performance_schema.kIw0nw.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/c038e118-77ee-4011-85eb-88b2eefdb241/storage_v2/_src_/schema/sys.zb4BAA.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shop/services.py" beforeDir="false" afterPath="$PROJECT_DIR$/shop/services.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shop/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/shop/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +107,7 @@
       <option name="presentableId" value="Default" />
       <updated>1751018316697</updated>
       <workItem from="1751018317690" duration="13203000" />
-      <workItem from="1751041018676" duration="2072000" />
+      <workItem from="1751041018676" duration="2698000" />
     </task>
     <task id="LOCAL-00001" summary="初始模版">
       <option name="closed" value="true" />
@@ -144,7 +149,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751041324411</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="两个接口成功运行">
+      <option name="closed" value="true" />
+      <created>1751043111937</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1751043111937</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -178,6 +191,7 @@
     <MESSAGE value="接口写好了但不能用。。。" />
     <MESSAGE value="修改备份" />
     <MESSAGE value="购买接口成功运行，保存&#10;调试搜寻接口" />
-    <option name="LAST_COMMIT_MESSAGE" value="购买接口成功运行，保存&#10;调试搜寻接口" />
+    <MESSAGE value="两个接口成功运行" />
+    <option name="LAST_COMMIT_MESSAGE" value="两个接口成功运行" />
   </component>
 </project>
