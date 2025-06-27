@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c97eac06-2f3c-4b48-ab6d-0aae62d0a4e2" name="更改" comment="接口写好了但不能用。。。">
+    <list default="true" id="c97eac06-2f3c-4b48-ab6d-0aae62d0a4e2" name="更改" comment="修改备份">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shop/services.py" beforeDir="false" afterPath="$PROJECT_DIR$/shop/services.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/终版/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/终版/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/终版/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/终版/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +100,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1751018316697</updated>
-      <workItem from="1751018317690" duration="9971000" />
+      <workItem from="1751018317690" duration="10660000" />
     </task>
     <task id="LOCAL-00001" summary="初始模版">
       <option name="closed" value="true" />
@@ -120,7 +118,15 @@
       <option name="project" value="LOCAL" />
       <updated>1751033477177</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="修改备份">
+      <option name="closed" value="true" />
+      <created>1751034870990</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1751034870990</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,6 +158,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="初始模版" />
     <MESSAGE value="接口写好了但不能用。。。" />
-    <option name="LAST_COMMIT_MESSAGE" value="接口写好了但不能用。。。" />
+    <MESSAGE value="修改备份" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改备份" />
   </component>
 </project>

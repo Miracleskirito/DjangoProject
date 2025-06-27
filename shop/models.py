@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class Product(models.Model):
+    DoesNotExist = None
     name = models.CharField(max_length=100)  # 商品名称
     description = models.TextField()  # 商品描述（含关键词）
     stock = models.PositiveIntegerField(default=0)  # 库存
@@ -47,6 +48,7 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
+    objects = None
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()

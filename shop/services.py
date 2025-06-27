@@ -6,6 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class OrderService:
     @staticmethod
     @transaction.atomic
@@ -15,18 +16,27 @@ class OrderService:
         """
         order = Order.objects.create()
         errors = []
-        savepoint = transaction.savepoint()  # 初始保存点
+        success_items = []
 
         for item_data in order_items_data:
-            product_id = item_data['product_id']
-            quantity = item_data['quantity']
-            print(product_id, quantity)
+            product_id = item_data.get('product_id')
+            quantity = item_data.get('quantity')
+            print(product_id,quantity)
+
+            # 验证数据格式
+            if not product_id or not isinstance(quantity, int) or quantity <= 0:
+                errors.append(f"无效商品数据: {item_data}")
+                continue
 
             try:
-                # 获取商品并加锁
+                # 获取商品并加锁（使用行级锁）
                 product = Product.objects.select_for_update().get(id=product_id)
 
-                # 创建订单项（自动触发库存验证）
+                # 检查库存（避免超卖）
+                if product.stock < quantity:
+                    raise ValidationError(f"库存不足，当前库存: {product.stock}")
+
+                # 创建订单项
                 OrderItem.objects.create(
                     order=order,
                     product=product,
@@ -36,17 +46,20 @@ class OrderService:
 
                 # 扣减库存
                 product.stock -= quantity
-                product.save()  # 自动更新缓存
+                product.save()
 
-            except (Product.DoesNotExist, ValidationError) as e:
+                success_items.append(product_id)
+
+            except Product.DoesNotExist:
+                errors.append(f"商品不存在: ID={product_id}")
+            except ValidationError as e:
                 errors.append(f"商品 {product_id}: {str(e)}")
-                transaction.savepoint_rollback(savepoint)  # 回滚当前商品操作
-            finally:
-                # 为下一个商品创建新保存点
-                savepoint = transaction.savepoint()
+            except Exception as e:
+                errors.append(f"处理商品 {product_id} 时发生未知错误: {str(e)}")
 
-        if not order.items.exists():
-            order.delete()  # 无成功项时删除订单
+        # 若没有成功的订单项，删除订单
+        if not success_items:
+            order.delete()
             return None, errors
 
         return order, errors
