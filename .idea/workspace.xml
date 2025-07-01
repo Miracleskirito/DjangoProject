@@ -4,10 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c97eac06-2f3c-4b48-ab6d-0aae62d0a4e2" name="更改" comment="最终版本，完成了两个接口，具体内容和使用方法请阅读readme.md">
-      <change afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+    <list default="true" id="c97eac06-2f3c-4b48-ab6d-0aae62d0a4e2" name="更改" comment="备份">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shop/services.py" beforeDir="false" afterPath="$PROJECT_DIR$/shop/services.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shop/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/shop/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shop/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/shop/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/store_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/store_page.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/终版/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/终版/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/终版/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/终版/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +23,9 @@
       <entry key="9fbfbd8a-5ccc-4cda-ab14-5dba5c193cf4" value="Blue" />
     </colors>
   </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -26,9 +33,32 @@
       </list>
     </option>
   </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Miracleskirito&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Miracleskirito/DjangoProject.git&quot;,
+    &quot;accountId&quot;: &quot;9712d84d-2003-4c62-b011-1dbcfaefb161&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
 }</component>
@@ -45,7 +75,9 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;django.template.preview.state&quot;: &quot;SHOW_EDITOR_AND_PREVIEW&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/miracleskirito/PycharmProjects/DjangoProject2/templates&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -59,6 +91,11 @@
     ]
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/templates" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="DjangoProject2" type="Python.DjangoServer" factoryName="Django server">
       <module name="DjangoProject2" />
@@ -105,7 +142,14 @@
       <workItem from="1751041018676" duration="2978000" />
       <workItem from="1751044011442" duration="6000" />
       <workItem from="1751044024738" duration="3000" />
-      <workItem from="1751088221723" duration="1043000" />
+      <workItem from="1751088221723" duration="3820000" />
+      <workItem from="1751094596400" duration="23000" />
+      <workItem from="1751218036524" duration="7000" />
+      <workItem from="1751218056909" duration="7721000" />
+      <workItem from="1751296061557" duration="172000" />
+      <workItem from="1751296237365" duration="58000" />
+      <workItem from="1751296368149" duration="3171000" />
+      <workItem from="1751333722737" duration="5114000" />
     </task>
     <task id="LOCAL-00001" summary="初始模版">
       <option name="closed" value="true" />
@@ -163,7 +207,23 @@
       <option name="project" value="LOCAL" />
       <updated>1751043806062</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="改了一下readme">
+      <option name="closed" value="true" />
+      <created>1751089415636</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1751089415636</updated>
+    </task>
+    <task id="LOCAL-00009" summary="备份">
+      <option name="closed" value="true" />
+      <created>1751297083366</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1751297083366</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -199,6 +259,8 @@
     <MESSAGE value="购买接口成功运行，保存&#10;调试搜寻接口" />
     <MESSAGE value="两个接口成功运行" />
     <MESSAGE value="最终版本，完成了两个接口，具体内容和使用方法请阅读readme.md" />
-    <option name="LAST_COMMIT_MESSAGE" value="最终版本，完成了两个接口，具体内容和使用方法请阅读readme.md" />
+    <MESSAGE value="改了一下readme" />
+    <MESSAGE value="备份" />
+    <option name="LAST_COMMIT_MESSAGE" value="备份" />
   </component>
 </project>

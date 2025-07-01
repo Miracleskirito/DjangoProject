@@ -7,6 +7,21 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+class GetProducts:
+    @staticmethod
+    def get_products():
+        try:
+            products=Product.objects.values('id','name','price','stock')
+
+            if not products:
+                return []
+
+            return list(products)
+
+        except Exception as e:
+            print(f'获取商品列表失败：{e}')
+            return []
+
 
 class OrderService:
     @staticmethod

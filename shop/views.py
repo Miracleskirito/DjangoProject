@@ -1,7 +1,25 @@
+from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from . import services
+from .services import GetProducts
 
+
+@api_view(['GET'])
+def store_page(request):
+    return render(request,'store_page.html')
+
+@api_view(['GET'])
+def product_list(request):
+    try:
+        products = GetProducts.get_products()
+
+        response_data = products
+        return Response(response_data)
+
+
+    except Exception as e:
+        return Response({'error': 500})
 
 @api_view(['POST'])
 def bulk_order(request):

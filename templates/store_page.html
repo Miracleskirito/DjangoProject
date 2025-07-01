@@ -354,433 +354,458 @@
 
     <script>
         const config = {
-        baseUrl: 'http://localhost:8000/',
-        getProductsEndpoint: 'shop/products/', // 初始加载时使用空关键词
-        searchEndpoint: 'shop/products/search?q=',
-        batchOrderEndpoint: 'shop/products/bulk-order/', // 修正为实际批量订单端点
-        orderItems: []
-    };
+    baseUrl: 'http://127.0.0.1:8000/',
+    getProductsEndpoint: 'shop/products/',
+    searchEndpoint: 'shop/products/search?q=',
+    batchOrderEndpoint: 'shop/products/bulk_order/',
+    orderItems: []
+};
 
-        // DOM元素引用
-         const dom = {
-        searchInput: document.getElementById('searchInput'),
-        productGrid: document.getElementById('productGrid'),
-        orderItemsContainer: document.getElementById('order-items-container'),
-        orderTotal: document.getElementById('orderTotal'),
-        processOrder: document.getElementById('processOrder'),
-        resultCard: document.getElementById('resultCard'),
-        resultContainer: document.getElementById('resultContainer'),
-        cartCount: document.getElementById('cartCount'),
-        toast: document.getElementById('toast')
-    };
+// DOM元素引用
+const dom = {
+    searchInput: document.getElementById('searchInput'),
+    productGrid: document.getElementById('productGrid'),
+    orderItemsContainer: document.getElementById('order-items-container'),
+    orderTotal: document.getElementById('orderTotal'),
+    processOrder: document.getElementById('processOrder'),
+    resultCard: document.getElementById('resultCard'),
+    resultContainer: document.getElementById('resultContainer'),
+    cartCount: document.getElementById('cartCount'),
+    toast: document.getElementById('toast')
+};
 
-        // 初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            // 绑定事件
-            bindEvents();
+// 存储所有商品数据的全局变量
+let allProducts = [];
 
-            // 加载初始商品
-            fetchInitialProducts();
-        });
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+    // 绑定事件
+    bindEvents();
 
-        // 绑定事件
-        function bindEvents() {
-            // 搜索输入
-            dom.searchInput.addEventListener('input', debounce(handleSearch, 500));
+    // 加载初始商品
+    fetchInitialProducts();
+});
 
-            // 添加商品到订单（事件委托）
-            dom.productGrid.addEventListener('click', function(e) {
-                if (e.target.closest('.add-to-order')) {
-                    const productId = e.target.closest('.add-to-order').dataset.id;
-                    addProductToOrder(productId);
-                }
-            });
+// 绑定事件
+function bindEvents() {
+    // 搜索输入
+    dom.searchInput.addEventListener('input', debounce(handleSearch, 500));
 
-            // 订单项操作（事件委托）
-            dom.orderItemsContainer.addEventListener('click', function(e) {
-                const itemElement = e.target.closest('.order-item');
-                if (!itemElement) return;
+    // 添加商品到订单（事件委托）
+    dom.productGrid.addEventListener('click', function(e) {
+        if (e.target.closest('.add-to-order')) {
+            const productId = e.target.closest('.add-to-order').dataset.id;
+            addProductToOrder(productId);
+        }
+    });
 
-                const productId = itemElement.dataset.id;
+    // 订单项操作（事件委托）
+    dom.orderItemsContainer.addEventListener('click', function(e) {
+        const itemElement = e.target.closest('.order-item');
+        if (!itemElement) return;
 
-                // 增加数量
-                if (e.target.closest('.increment')) {
-                    updateOrderItemQuantity(productId, 1);
-                }
+        const productId = itemElement.dataset.id;
 
-                // 减少数量
-                if (e.target.closest('.decrement')) {
-                    updateOrderItemQuantity(productId, -1);
-                }
-
-                // 删除商品
-                if (e.target.closest('.remove-item')) {
-                    removeOrderItem(productId);
-                }
-            });
-
-            // 数量输入框变化
-            dom.orderItemsContainer.addEventListener('change', function(e) {
-                if (e.target.classList.contains('quantity-input')) {
-                    const productId = e.target.closest('.order-item').dataset.id;
-                    const newQuantity = parseInt(e.target.value);
-
-                    if (newQuantity > 0) {
-                        updateOrderItemQuantity(productId, 0, newQuantity);
-                    } else {
-                        e.target.value = 1;
-                    }
-                }
-            });
-
-            // 处理订单
-            dom.processOrder.addEventListener('click', processBatchOrder);
+        // 增加数量
+        if (e.target.closest('.increment')) {
+            updateOrderItemQuantity(productId, 1);
         }
 
-        // 获取初始商品
-        function fetchInitialProducts() {
-            const url = `${config.baseUrl}${config.getProductsEndpoint}`;
-
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`API错误: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    renderProductList(data);
-                })
-                .catch(error => {
-                    console.error('加载商品错误:');
-                    dom.productGrid.innerHTML = `<div class="alert alert-danger">加载商品失败: ${error.message}</div>`;
-                });
+        // 减少数量
+        if (e.target.closest('.decrement')) {
+            updateOrderItemQuantity(productId, -1);
         }
 
-        // 防抖函数
-        function debounce(func, wait) {
-            let timeout;
-            return function() {
-                const context = this;
-                const args = arguments;
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(context, args), wait);
-            };
+        // 删除商品
+        if (e.target.closest('.remove-item')) {
+            removeOrderItem(productId);
         }
+    });
 
-        // 搜索处理
-        function handleSearch() {
-            const keyword = dom.searchInput.value.trim();
-            if (keyword.length < 2) {
-                fetchInitialProducts();
-                return;
-            }
+    // 数量输入框变化
+    dom.orderItemsContainer.addEventListener('change', function(e) {
+        if (e.target.classList.contains('quantity-input')) {
+            const productId = e.target.closest('.order-item').dataset.id;
+            const newQuantity = parseInt(e.target.value);
 
-            // 构建搜索URL
-            const url = `${config.baseUrl}${config.searchEndpoint}?keyword=${encodeURIComponent(keyword)}`;
-
-            fetch(url)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`API错误: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    renderProductList(data);
-                })
-                .catch(error => {
-                    console.error('搜索错误:', error);
-                    dom.productGrid.innerHTML = `<div class="alert alert-danger">搜索失败: ${error.message}</div>`;
-                });
-        }
-
-        // 渲染商品列表
-        function renderProductList(products) {
-            if (!products || products.length === 0) {
-                dom.productGrid.innerHTML = '<div class="empty-state"><i class="fas fa-box-open"></i><p>未找到相关商品</p></div>';
-                return;
-            }
-
-            let html = '';
-            products.forEach(product => {
-                const inOrder = config.orderItems.some(item => item.id === product.id);
-                const outOfStock = product.stock <= 0;
-
-                html += `
-                <div class="product-card">
-                    <div class="product-image position-relative">
-                        <img src="${product.image || 'https://via.placeholder.com/300x200/e0e6ed/6c757d?text=商品图片'}" alt="${product.name}">
-                        <span class="stock-badge badge ${outOfStock ? 'bg-danger' : product.stock < 10 ? 'bg-warning text-dark' : 'bg-success'}">
-                            库存: ${product.stock}
-                        </span>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">${product.name}</h5>
-                        <p class="card-text text-muted small">${product.description || '暂无描述'}</p>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <span class="h5 text-primary">¥${product.price.toFixed(2)}</span>
-                            ${inOrder
-                                ? '<button class="btn btn-sm btn-outline-secondary" disabled><i class="fas fa-check me-1"></i>已添加</button>'
-                                : outOfStock
-                                    ? '<button class="btn btn-sm btn-outline-secondary" disabled><i class="fas fa-times me-1"></i>缺货</button>'
-                                    : `<button class="btn btn-sm btn-outline-primary add-to-order" data-id="${product.id}">
-                                        <i class="fas fa-cart-plus me-1"></i>添加
-                                       </button>`
-                            }
-                        </div>
-                    </div>
-                </div>
-                `;
-            });
-
-            dom.productGrid.innerHTML = html;
-        }
-
-        // 添加商品到订单
-        function addProductToOrder(productId) {
-            // 检查是否已在订单中
-            if (config.orderItems.some(item => item.id === productId)) {
-                showToast('该商品已在购物车中', 'warning');
-                return;
-            }
-
-            // 从商品列表获取商品详情
-            const productCard = document.querySelector(`.add-to-order[data-id="${productId}"]`)?.closest('.product-card');
-            if (!productCard) return;
-
-            const productName = productCard.querySelector('.card-title').textContent;
-            const productPrice = parseFloat(productCard.querySelector('.text-primary').textContent.replace('¥', ''));
-            const productStock = parseInt(productCard.querySelector('.stock-badge').textContent.replace('库存: ', ''));
-
-            // 添加到订单
-            config.orderItems.push({
-                id: productId,
-                name: productName,
-                price: productPrice,
-                stock: productStock,
-                quantity: 1
-            });
-
-            // 更新购物车数量
-            dom.cartCount.textContent = config.orderItems.length;
-
-            // 渲染订单项
-            renderOrderItems();
-            showToast(`已添加 ${productName} 到购物车`, 'success');
-        }
-
-        // 渲染订单项
-        function renderOrderItems() {
-            if (config.orderItems.length === 0) {
-                dom.orderItemsContainer.innerHTML = '<div class="empty-state py-3"><i class="fas fa-shopping-cart"></i><p>从左侧添加商品到购物车</p></div>';
-                dom.orderTotal.style.display = 'none';
-                dom.cartCount.textContent = '0';
-                return;
-            }
-
-            let html = '';
-            let total = 0;
-
-            config.orderItems.forEach(item => {
-                total += item.price * item.quantity;
-
-                html += `
-                <div class="order-item" data-id="${item.id}">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="mb-1">${item.name}</h6>
-                            <div class="d-flex align-items-center">
-                                <span class="text-muted small me-3">ID: ${item.id}</span>
-                                <span class="text-primary">¥${item.price.toFixed(2)} × <span class="quantity-value">${item.quantity}</span></span>
-                            </div>
-                        </div>
-                        <div class="order-item-controls">
-                            <div class="quantity-control me-3">
-                                <button class="quantity-btn decrement">-</button>
-                                <input type="text" class="quantity-input" value="${item.quantity}" data-id="${item.id}" data-price="${item.price}">
-                                <button class="quantity-btn increment">+</button>
-                            </div>
-                            <button class="btn btn-sm btn-outline-danger remove-item">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                `;
-            });
-
-            dom.orderItemsContainer.innerHTML = html;
-            dom.orderTotal.querySelector('.text-primary').textContent = `¥${total.toFixed(2)}`;
-            dom.orderTotal.style.display = 'block';
-        }
-
-        // 更新订单项数量
-        function updateOrderItemQuantity(productId, delta, newQuantity) {
-            const itemIndex = config.orderItems.findIndex(item => item.id === productId);
-            if (itemIndex === -1) return;
-
-            if (newQuantity !== undefined) {
-                config.orderItems[itemIndex].quantity = newQuantity;
+            if (newQuantity > 0) {
+                updateOrderItemQuantity(productId, 0, newQuantity);
             } else {
-                config.orderItems[itemIndex].quantity += delta;
-
-                // 确保数量至少为1
-                if (config.orderItems[itemIndex].quantity < 1) {
-                    config.orderItems[itemIndex].quantity = 1;
-                }
+                e.target.value = 1;
             }
-
-            renderOrderItems();
         }
+    });
 
-        // 移除订单项
-        function removeOrderItem(productId) {
-            const itemIndex = config.orderItems.findIndex(item => item.id === productId);
-            if (itemIndex === -1) return;
+    // 处理订单
+    dom.processOrder.addEventListener('click', processBatchOrder);
+}
 
-            const itemName = config.orderItems[itemIndex].name;
-            config.orderItems.splice(itemIndex, 1);
+// 获取初始商品
+function fetchInitialProducts() {
+    const url = `${config.baseUrl}${config.getProductsEndpoint}`;
 
-            renderOrderItems();
-
-            // 更新商品列表中的按钮状态
-            const addButton = document.querySelector(`.add-to-order[data-id="${productId}"]`);
-            if (addButton) {
-                addButton.disabled = false;
-                addButton.innerHTML = '<i class="fas fa-cart-plus me-1"></i>添加';
-                addButton.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`API错误: ${response.status}`);
             }
+            return response.json();
+        })
+        .then(data => {
+            // 保存所有商品数据
+            allProducts = data;
+            renderProductList(data);
+        })
+        .catch(error => {
+            console.error('加载商品错误:', error);
+            dom.productGrid.innerHTML = `<div class="alert alert-danger">加载商品失败: ${error.message}</div>`;
+        });
+}
 
-            showToast(`已移除 ${itemName}`, 'info');
-        }
+// 防抖函数
+function debounce(func, wait) {
+    let timeout;
+    return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+}
 
-        // 处理批量订单
-        function processBatchOrder() {
-            if (config.orderItems.length === 0) {
-                showToast('购物车中没有商品', 'warning');
-                return;
+// 搜索处理
+function handleSearch() {
+    const keyword = dom.searchInput.value.trim();
+    if (keyword.length < 2) {
+        renderProductList(allProducts);
+        return;
+    }
+
+    // 构建搜索URL
+    const url = `${config.baseUrl}${config.searchEndpoint}${encodeURIComponent(keyword)}`;
+
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`API错误: ${response.status}`);
             }
+            return response.json();
+        })
+        .then(data => {
+            // 新接口返回格式: { results: ["商品名称1", "商品名称2", ...] }
+            const matchedNames = data.results;
+            
+            // 从所有商品中过滤出匹配名称的商品
+            const matchedProducts = allProducts.filter(product => 
+                matchedNames.includes(product.name)
+            );
+            
+            renderProductList(matchedProducts);
+        })
+        .catch(error => {
+            console.error('搜索错误:', error);
+            dom.productGrid.innerHTML = `<div class="alert alert-danger">搜索失败: ${error.message}</div>`;
+        });
+}
 
-            // 准备请求数据
-            const orderData = {
-                items: config.orderItems.map(item => ({
-                    product_id: item.id,
-                    quantity: item.quantity
-                }))
-            };
+// 渲染商品列表
+function renderProductList(products) {
+    if (!products || products.length === 0) {
+        dom.productGrid.innerHTML = '<div class="empty-state"><i class="fas fa-box-open"></i><p>未找到相关商品</p></div>';
+        return;
+    }
 
-            // 显示加载状态
-            const originalButtonText = dom.processOrder.innerHTML;
-            dom.processOrder.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>处理中...';
-            dom.processOrder.disabled = true;
+    let html = '';
+    products.forEach(product => {
+        const inOrder = config.orderItems.some(item => item.id === product.id);
+        const outOfStock = product.stock <= 0;
 
-            // 发送请求
-            const url = `${config.baseUrl}${config.batchOrderEndpoint}`;
-
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(orderData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(err => { throw new Error(err.message || '订单处理失败'); });
-                }
-                return response.json();
-            })
-            .then(result => {
-                // 显示结果
-                renderOrderResults(result);
-                dom.resultCard.style.display = 'block';
-
-                // 处理失败的商品
-                result.results.forEach(item => {
-                    if (!item.success) {
-                        showToast(`商品 ${item.product_id} 已售罄`, 'error');
+        html += `
+        <div class="product-card">
+            <div class="product-image position-relative">
+                <img src="${product.image || 'https://via.placeholder.com/300x200/e0e6ed/6c757d?text=商品图片'}" alt="${product.name}">
+                <span class="stock-badge badge ${outOfStock ? 'bg-danger' : product.stock < 10 ? 'bg-warning text-dark' : 'bg-success'}">
+                    库存: ${product.stock}
+                </span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">${product.name}</h5>
+                <p class="card-text text-muted small">${product.description || '暂无描述'}</p>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <span class="h5 text-primary">¥${product.price.toFixed(2)}</span>
+                    ${inOrder
+                        ? '<button class="btn btn-sm btn-outline-secondary" disabled><i class="fas fa-check me-1"></i>已添加</button>'
+                        : outOfStock
+                            ? '<button class="btn btn-sm btn-outline-secondary" disabled><i class="fas fa-times me-1"></i>缺货</button>'
+                            : `<button class="btn btn-sm btn-outline-primary add-to-order" data-id="${product.id}">
+                                <i class="fas fa-cart-plus me-1"></i>添加
+                               </button>`
                     }
-                });
-            })
-            .catch(error => {
-                console.error('订单处理错误:', error);
-                showToast(`订单处理失败: ${error.message}`, 'error');
-            })
-            .finally(() => {
-                dom.processOrder.innerHTML = originalButtonText;
-                dom.processOrder.disabled = false;
-            });
-        }
+                </div>
+            </div>
+        </div>
+        `;
+    });
 
-        // 渲染订单结果
-        function renderOrderResults(result) {
-            if (!result || !result.results || result.results.length === 0) {
-                dom.resultContainer.innerHTML = '<div class="alert alert-warning">未返回处理结果</div>';
-                return;
-            }
+    dom.productGrid.innerHTML = html;
+}
 
-            let html = '';
-            let successCount = 0;
-            let totalCount = result.results.length;
+// 添加商品到订单
+function addProductToOrder(productId) {
+    // 检查是否已在订单中
+    if (config.orderItems.some(item => item.id == productId)) {
+        showToast('该商品已在购物车中', 'warning');
+        return;
+    }
 
-            result.results.forEach(item => {
-                if (item.success) successCount++;
+    // 从所有商品中查找商品详情
+    const product = allProducts.find(p => p.id == productId);
+    if (!product) return;
 
-                const orderItem = config.orderItems.find(i => i.id === item.product_id) || {};
+    // 添加到订单
+    config.orderItems.push({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        stock: product.stock,
+        quantity: 1
+    });
 
-                html += `
-                <div class="d-flex align-items-center mb-3">
-                    <div class="status-icon ${item.success ? 'success' : 'error'}">
-                        <i class="fas ${item.success ? 'fa-check' : 'fa-times'}"></i>
-                    </div>
-                    <div>
-                        <h6 class="mb-0">${orderItem.name || `商品ID: ${item.product_id}`}</h6>
-                        <small class="text-muted">ID: ${item.product_id} | 数量: ${item.quantity}</small>
-                        <div class="d-flex flex-wrap mt-1">
-                            ${item.success
-                                ? `<span class="badge success-badge me-2">库存扣减成功</span>
-                                   <span class="badge success-badge">订单创建成功</span>`
-                                : `<span class="badge error-badge me-2">库存不足</span>
-                                   <span class="badge error-badge">当前库存: ${item.current_stock}</span>`
-                            }
-                        </div>
+    // 更新购物车数量
+    dom.cartCount.textContent = config.orderItems.length;
+
+    // 渲染订单项
+    renderOrderItems();
+    showToast(`已添加 ${product.name} 到购物车`, 'success');
+}
+
+// 渲染订单项
+function renderOrderItems() {
+    if (config.orderItems.length === 0) {
+        dom.orderItemsContainer.innerHTML = '<div class="empty-state py-3"><i class="fas fa-shopping-cart"></i><p>从左侧添加商品到购物车</p></div>';
+        dom.orderTotal.style.display = 'none';
+        dom.cartCount.textContent = '0';
+        return;
+    }
+
+    let html = '';
+    let total = 0;
+
+    config.orderItems.forEach(item => {
+        total += item.price * item.quantity;
+
+        html += `
+        <div class="order-item" data-id="${item.id}">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="mb-1">${item.name}</h6>
+                    <div class="d-flex align-items-center">
+                        <span class="text-muted small me-3">ID: ${item.id}</span>
+                        <span class="text-primary">¥${item.price.toFixed(2)} × <span class="quantity-value">${item.quantity}</span></span>
                     </div>
                 </div>
-                `;
-            });
-
-            // 添加进度条
-            html += `
-            <div class="progress-container mt-4">
-                <div class="progress-bar" style="width: ${(successCount / totalCount) * 100}%"></div>
+                <div class="order-item-controls">
+                    <div class="quantity-control me-3">
+                        <button class="quantity-btn decrement">-</button>
+                        <input type="text" class="quantity-input" value="${item.quantity}" data-id="${item.id}" data-price="${item.price}">
+                        <button class="quantity-btn increment">+</button>
+                    </div>
+                    <button class="btn btn-sm btn-outline-danger remove-item">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
             </div>
-            <div class="text-center small mt-2">处理进度: ${successCount}/${totalCount} 项完成</div>
+        </div>
+        `;
+    });
+
+    dom.orderItemsContainer.innerHTML = html;
+    dom.orderTotal.querySelector('.text-primary').textContent = `¥${total.toFixed(2)}`;
+    dom.orderTotal.style.display = 'block';
+}
+
+// 更新订单项数量
+function updateOrderItemQuantity(productId, delta, newQuantity) {
+    const itemIndex = config.orderItems.findIndex(item => item.id == productId);
+    if (itemIndex === -1) return;
+
+    if (newQuantity !== undefined) {
+        config.orderItems[itemIndex].quantity = newQuantity;
+    } else {
+        config.orderItems[itemIndex].quantity += delta;
+
+        // 确保数量至少为1
+        if (config.orderItems[itemIndex].quantity < 1) {
+            config.orderItems[itemIndex].quantity = 1;
+        }
+    }
+
+    renderOrderItems();
+}
+
+// 移除订单项
+function removeOrderItem(productId) {
+    const itemIndex = config.orderItems.findIndex(item => item.id == productId);
+    if (itemIndex === -1) return;
+
+    const itemName = config.orderItems[itemIndex].name;
+    config.orderItems.splice(itemIndex, 1);
+
+    renderOrderItems();
+
+    // 更新商品列表中的按钮状态
+    const addButton = document.querySelector(`.add-to-order[data-id="${productId}"]`);
+    if (addButton) {
+        addButton.disabled = false;
+        addButton.innerHTML = '<i class="fas fa-cart-plus me-1"></i>添加';
+        addButton.classList.replace('btn-outline-secondary', 'btn-outline-primary');
+    }
+
+    showToast(`已移除 ${itemName}`, 'info');
+}
+
+// 处理批量订单
+function processBatchOrder() {
+    if (config.orderItems.length === 0) {
+        showToast('购物车中没有商品', 'warning');
+        return;
+    }
+
+    // 准备请求数据 - 确保格式正确
+    const orderData = {
+        items: config.orderItems.map(item => ({
+            product_id: parseInt(item.id), // 确保为整数
+            quantity: parseInt(item.quantity) // 确保为整数
+        }))
+    };
+
+    // 显示加载状态
+    const originalButtonText = dom.processOrder.innerHTML;
+    dom.processOrder.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>处理中...';
+    dom.processOrder.disabled = true;
+
+    // 发送请求
+    const url = `${config.baseUrl}${config.batchOrderEndpoint}`;
+
+    // 调试信息 - 显示发送的数据
+    console.log("发送的订单数据:", JSON.stringify(orderData, null, 2));
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(orderData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => {
+                throw new Error(`HTTP ${response.status}: ${text}`);
+            });
+        }
+        return response.json();
+    })
+    .then(result => {
+        // 显示结果
+        renderOrderResults(result);
+        dom.resultCard.style.display = 'block';
+        
+        // 显示成功消息
+        showToast(`订单 #${result.order_id} 提交成功，${result.success_items} 件商品已处理`, 'success');
+        
+        // 清空购物车
+        config.orderItems = [];
+        renderOrderItems();
+    })
+    .catch(error => {
+        console.error('订单处理错误:', error);
+        showToast(`订单处理失败: ${error.message}`, 'error');
+    })
+    .finally(() => {
+        dom.processOrder.innerHTML = originalButtonText;
+        dom.processOrder.disabled = false;
+    });
+}
+
+// 渲染订单结果
+function renderOrderResults(result) {
+    if (!result) {
+        dom.resultContainer.innerHTML = '<div class="alert alert-warning">未返回处理结果</div>';
+        return;
+    }
+
+    let html = '';
+    const totalItems = config.orderItems.length; // 注意：此时购物车已清空，但totalItems是提交时的总数
+
+    // 显示订单信息
+    html += `
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <span class="badge bg-primary me-2">订单号 #${result.order_id}</span>
+            <span class="badge bg-success">成功处理 ${result.success_items} 件商品</span>
+        </div>
+    </div>
+    `;
+
+    // 显示错误信息
+    if (result.errors && result.errors.length > 0) {
+        html += `<div class="alert alert-danger mb-3"><i class="fas fa-exclamation-triangle me-2"></i>部分商品处理失败</div>`;
+        
+        result.errors.forEach(error => {
+            // 尝试从原始购物车中获取商品信息
+            const item = config.orderItems.find(i => i.id == error.product_id) || {};
+            
+            html += `
+            <div class="d-flex align-items-center mb-3">
+                <div class="status-icon error">
+                    <i class="fas fa-times"></i>
+                </div>
+                <div>
+                    <h6 class="mb-0">${item.name || `商品ID: ${error.product_id}`}</h6>
+                    <small class="text-muted">ID: ${error.product_id}</small>
+                    <div class="mt-1">
+                        <span class="badge error-badge">${error.message || '处理失败'}</span>
+                    </div>
+                </div>
+            </div>
             `;
+        });
+    } else {
+        html += `<div class="alert alert-success mb-3"><i class="fas fa-check-circle me-2"></i>所有商品处理成功</div>`;
+    }
 
-            dom.resultContainer.innerHTML = html;
-        }
+    // 添加进度条
+    const successPercentage = (result.success_items / totalItems) * 100;
+    html += `
+    <div class="progress-container mt-4">
+        <div class="progress-bar" style="width: ${successPercentage}%"></div>
+    </div>
+    <div class="text-center small mt-2">处理进度: ${result.success_items}/${totalItems} 项完成</div>
+    `;
 
-        // 显示Toast通知
-        function showToast(message, type = 'info') {
-            const toast = dom.toast;
-            const toastMessage = toast.querySelector('.toast-message');
+    dom.resultContainer.innerHTML = html;
+}
 
-            // 设置消息和样式
-            toastMessage.textContent = message;
-            toast.className = `toast ${type === 'error' ? 'error' : ''}`;
-            toast.querySelector('.toast-icon').innerHTML =
-                type === 'error' ? '<i class="fas fa-exclamation"></i>' :
-                '<i class="fas fa-info"></i>';
+// 显示Toast通知
+function showToast(message, type = 'info') {
+    const toast = dom.toast;
+    const toastMessage = toast.querySelector('.toast-message');
 
-            // 显示Toast
-            toast.classList.add('show');
+    // 设置消息和样式
+    toastMessage.textContent = message;
+    toast.className = `toast ${type === 'error' ? 'error' : ''}`;
+    toast.querySelector('.toast-icon').innerHTML =
+        type === 'error' ? '<i class="fas fa-exclamation"></i>' :
+        '<i class="fas fa-info"></i>';
 
-            // 3秒后隐藏
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
+    // 显示Toast
+    toast.classList.add('show');
+
+    // 3秒后隐藏
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
     </script>
 </body>
 </html>
