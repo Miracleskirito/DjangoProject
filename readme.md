@@ -1,5 +1,7 @@
-电商核心模块系统
-这是一个基于Django构建的精简电商核心模块，实现了批量订单处理和商品搜索两大核心功能，支持高并发场景下的稳定运行。
+# 电商核心模块系统（Django + Redis + MySQL）
+
+这是一个基于 Django 构建的电商核心模块，实现了 **批量订单处理** 和 **商品搜索** 两大核心功能，支持高并发场景下的稳定运行。
+
 
 功能概述
 
@@ -20,7 +22,10 @@ MySQL
 
 以下是使用方法：
 
-首先先将代码部署在本地
+首先先将代码部署在本地：
+终端：git clone https://github.com/Miracleskirito/DjangoProject.git
+     cd DjangoProject
+
 打开编译软件和终端
 要打开redis-server
 现在settings中配置数据库连接文件
@@ -40,6 +45,10 @@ shop_orderitem:储存订单明细
 shop_order:储存订单
 
 接下来是两个接口：
+1.可以直接运行后，在浏览器访问127.0.0.1/shop/来访问页面
+
+
+2.postman访问接口：
 商品搜索接口：
 http://127.0.0.1:8000/shop/products/search/?q=关键字
 关键字处换成想搜索的字，GET请求
@@ -50,9 +59,6 @@ http://127.0.0.1:8000/shop/products/search/?q=关键字
         "智能电脑"
     ]
 }
-
-
-
 
 商品购买接口：
 http://127.0.0.1:8000/shop/products/
